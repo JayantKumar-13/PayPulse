@@ -9,7 +9,7 @@ services:
       DB_URL: jdbc:postgresql://postgres:5432/paypulse
       DB_USERNAME: ${DB_USERNAME:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      JWT_SECRET: ${JWT_SECRET:-dev-jwt-secret}
+      JWT_SECRET: ${JWT_SECRET:uyttydtre6t6987675647yuyfgftuiy}
       OTP_SECRET: ${OTP_SECRET:-dev-otp-secret}
       PAYMENT_WEBHOOK_SECRET: ${PAYMENT_WEBHOOK_SECRET:-dev-payment-webhook-secret}
       PAYMENT_WEBHOOK_URL: ${PAYMENT_WEBHOOK_URL:-}
