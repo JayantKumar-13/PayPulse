@@ -1,0 +1,53 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      DB_URL: jdbc:postgresql://postgres:5432/paypulse
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-dev-jwt-secret}
+      OTP_SECRET: ${OTP_SECRET:-dev-otp-secret}
+      PAYMENT_WEBHOOK_SECRET: ${PAYMENT_WEBHOOK_SECRET:-dev-payment-webhook-secret}
+      PAYMENT_WEBHOOK_URL: ${PAYMENT_WEBHOOK_URL:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      MAINTENANCE_MODE: ${MAINTENANCE_MODE:-false}
+      INITIAL_WALLET_BALANCE: ${INITIAL_WALLET_BALANCE:-500000}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: paypulse
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d paypulse"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,50 @@
+server:
+  port: ${PORT:3000}
+
+spring:
+  application:
+    name: paypulse
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/paypulse}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: ${REDIS_TIMEOUT:2s}
+      repositories:
+        enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+app:
+  jwt-secret: ${JWT_SECRET:uyttydtre6t6987675647yuyfgftuiy}
+  otp-secret: ${OTP_SECRET:dev-otp-secret}
+  cors-origins: ${CORS_ORIGINS:*}
+  maintenance-mode: ${MAINTENANCE_MODE:false}
+  initial-wallet-balance: ${INITIAL_WALLET_BALANCE:500000}
+  payment:
+    webhook-secret: ${PAYMENT_WEBHOOK_SECRET:dev-payment-webhook-secret}
+    webhook-url: ${PAYMENT_WEBHOOK_URL:}
+    min-delay-ms: ${PAYMENT_MIN_DELAY_MS:2000}
+    max-delay-ms: ${PAYMENT_MAX_DELAY_MS:5000}
+    success-rate: ${PAYMENT_SUCCESS_RATE:0.8}
+    gateway-failure-rate: ${PAYMENT_GATEWAY_FAILURE_RATE:0.1}
+    circuit-breaker:
+      failure-rate-threshold: ${PAYMENT_CB_FAILURE_RATE_THRESHOLD:50}
+      slow-call-rate-threshold: ${PAYMENT_CB_SLOW_CALL_RATE_THRESHOLD:100}
+      slow-call-duration-threshold-ms: ${PAYMENT_CB_SLOW_CALL_DURATION_THRESHOLD_MS:6000}
+      sliding-window-size: ${PAYMENT_CB_SLIDING_WINDOW_SIZE:5}
+      minimum-number-of-calls: ${PAYMENT_CB_MINIMUM_NUMBER_OF_CALLS:5}
+      permitted-number-of-calls-in-half-open-state: ${PAYMENT_CB_HALF_OPEN_CALLS:2}
+      wait-duration-open-seconds: ${PAYMENT_CB_WAIT_DURATION_OPEN_SECONDS:30}
+
+logging:
+  level:
+    root: INFO
